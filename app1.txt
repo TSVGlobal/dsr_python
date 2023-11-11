@@ -1,0 +1,92 @@
+/yourapp
+    /models
+        __init__.py
+        air_dsr.py
+        sea_dsr.py
+    /routes
+        __init__.py
+        air_routes.py
+        sea_routes.py
+    /templates
+        ... (your HTML templates)
+    config.py
+    main.py
+    requirements.txt
+
+
+
+app.py
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from config import Config
+
+app = Flask(__name__)
+app.config.from_object(Config)
+db = SQLAlchemy(app)
+
+from routes import *
+
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
+    app.run()
+
+
+
+config.py
+
+import os
+
+class Config:
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'mysql+mysqlconnector://root:@localhost/dsr')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
+
+
+models.py
+
+from app import db
+
+class AirDsr(db.Model):
+    # ... (your AirDsr model fields)
+
+class SeaDsr(db.Model):
+    # ... (your SeaDsr model fields)
+
+
+
+
+routes.py:
+
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from models import AirDsr, SeaDsr
+from app import db
+
+main_bp = Blueprint('main_bp', __name__)
+
+@main_bp.route('/', methods=['GET', 'POST'])
+@main_bp.route('/login')
+def index():
+    # ... (your index route logic)
+
+@main_bp.route('/air', methods=['GET', 'POST'])
+def air():
+    # ... (your air route logic)
+
+@main_bp.route('/sea', methods=['GET', 'POST'])
+def sea():
+    # ... (your sea route logic)
+
+
+
+# ... (other routes)
+
+# Register the blueprints
+from app import app
+app.register_blueprint(main_bp)
+.env
+
+SECRET_KEY=your-secret-key
+DATABASE_URL=mysql+mysqlconnector://root:@localhost/dsr
