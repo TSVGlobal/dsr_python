@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static',filename='images/Favicon.png') }}" type="image/x-icon">
+    <!-- Bootstrap Design -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Bootstrap Javascript -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+
+
+    <title>Air Home Page</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .container-fluid{
+            margin-top: 120px;
+        }
+        .table{
+            border: 1px solid black;
+        }
+        .thead tr th{
+            padding: 20px 60px;
+            vertical-align: middle;
+            border: 1px solid black;
+            font-size: 15px;
+        }
+        .tbody tr td{
+            padding: 10px 60px;
+            vertical-align: middle; 
+            border: 1px solid black;
+            font-size: 15px;
+        }
+        .custom-form{
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="fixed-top bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="{{url_for('static',filename='images/Logo.png')}}" width="320" height="80" alt="Company Logo">
+        </a>
+        <div class="float-right mt-3 mr-3">
+            <button class="btn btn-primary btn-lg" type="button" data-toggle="modal" data-target="#exampleModalCenter">FILTER</button>
+        </div>
+        <a href="{{ url_for('airdownload') }}" class="btn btn-success">Download</a>
+    </header>
+
+    <!-- Filter Pop Up Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Filter Table</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('dsrairinfo') }}">
+                        <div class="form-group">
+                            <label for="searchcolumn">Select To Search:</label>
+                            <select class="form-control" name="searchcolumn" id="searchcolumn">
+                                <option value="">--Select The Column--</option>
+                                {% for air_column_name in air_column_names %}
+                                <option value="{{ air_column_name }}">{{ air_column_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <h1>HEwLLO</h1>
+                            <label for="searchtext">What Are You Searching?:</label>
+                            <input type="text" class="form-control" name="searchtext" id="searchtext">
+                        </div>
+                        <button type="submit" class="btn btn-info btn-block mt-3">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+      
+        <div class="container-fluid">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissable" role="alert">
+                    {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+            <table id="example" class="table table-striped text-center">
+               <thead class="thead-dark thead">
+                    <tr class="text-uppercase">
+                        <th>ID</th>
+                        <th>PONUMBER</th>
+                        <th>SUPPLIERNAME</th>
+                        <th>CONSIGNEE</th>
+                        <th>BOOKINGRECEIVEDDATE</th>
+                        <th>BKGDATE</th>
+                        <th>CARGOREADINESS</th>
+                        <th>PICKUPDATE</th>
+                        <th>WAREHOUSERCVD</th>
+                        <th>COUNTRYOFORIGIN</th>
+                        <th>TERMS</th>
+                        <th>HAWBNO</th>
+                        <th>MAWB</th>
+                        <th>PKGS</th>
+                        <th>GRSWT</th>
+                        <th>CHGWT</th>
+                        <th>FLTDETAILS</th>
+                        <th>ETD</th>
+                        <th>ETA</th>
+                        <th>ATA</th>
+                        <th>REVISEDETA</th>
+                        <th>REVISEDETD</th>
+                        <th>PREALERTDTD</th>
+                        <th>REMARKS</th>
+                        <th>ACTION</th>
+                    </tr>
+               </thead>
+                <tbody class="tbody">
+                    {% for airinfo in airinformation %}
+                    <tr class="text-uppercase pt-1">
+                        <td>{{ airinfo.id }}</td>
+                        <td>{{ airinfo.ponumber }}</td>
+                        <td>{{ airinfo.suppliername }}</td>
+                        <td>{{ airinfo.consignee }}</td>
+                        <td>{{ airinfo.bookingreceiveddate }}</td>
+                        <td>{{ airinfo.bkgdate }}</td>
+                        <td>{{ airinfo.cargoreadiness }}</td>
+                        <td>{{ airinfo.pickupdate }}</td>
+                        <td>{{ airinfo.warehousercvd }}</td>
+                        <td>{{ airinfo.countryoforigin }}</td>
+                        <td>{{ airinfo.terms }}</td>
+                        <td>{{ airinfo.hawbno }}</td>
+                        <td>{{ airinfo.mawb }}</td>
+                        <td>{{ airinfo.pkgs }}</td>
+                        <td>{{ airinfo.grswt }}</td>
+                        <td>{{ airinfo.chgwt }}</td>
+                        <td>{{ airinfo.fltdetails }}</td>
+                        <td>{{ airinfo.etd }}</td>
+                        <td>{{ airinfo.eta }}</td>
+                        <td>{{ airinfo.revisedetd }}</td>
+                        <td>{{ airinfo.revisedeta }}</td>
+                        <td>{{ airinfo.ata }}</td>
+                        <td>{{ airinfo.prealertdtd }}</td>
+                        <td>{{ airinfo.remarks }}</td>
+                        <td>
+                            <a href="/airupdate/{{airinfo.id}}" class="btn btn-warning btn-xs m-2" data-toggle="modal" data-target="#modaledit{{airinfo.id}}" title="Edit"><i class="bi bi-pencil-square"></i></a>
+                        <!-- <a href="{{ url_for('seadelete', id=airinfo.id) }}" class="btn btn-danger btn-xs" data-toggle="modal" onclick="return confirm('Are You Sure To Delete?')"><i class="bi bi-trash-fill"></i></a> -->
+
+                            <form method="POST" action="{{ url_for('airdelete',id=airinfo.id) }}">
+                                <button type="submit" class="btn btn-danger btn-xs m-2" data-toggle="modal" title="Delete" onclick="return confirm('Are You Sure To Delete?')"><i class="bi bi-trash-fill"></i></button>
+                            </form>
+                        </td>  
+                    </tr>
+
+                    <!-- Modal Edit Employee -->
+                <div id="modaledit{{airinfo.id}}" class="modal fade" role="dialog">
+                    <div class="modal-dialog custom-form">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Update Information</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{url_for('airupdate')}}" method="POST">
+                                    <div class="form-group">
+                                        <label for="ponumber">Po Number:</label>
+                                        <input type="hidden" name="id" value="{{airinfo.id}}">
+                                        <input type="number" class="form-control" name="ponumber" value="{{airinfo.ponumber}}">
+                                    </div>
+                                    <!-- ponumber,suppliername,consignee,bookingreceiveddate,bkgdate,cargoreadiness,pickupdate,warehousercvd,countryoforigin,terms,hawbno,mawb,pkgs,grswt,chgwt,fltdetails,etd,eta,revisedetd,revisedeta,ata,prealertdtd,remarks -->
+                                    <!-- <div class="form-group">
+                                        <label for="id">ID:</label>
+                                        <input type="number" class="form-control" id="id" name="id" value="{{airinfo.id}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ponumber">Po Number:</label>
+                                        <input type="number" class="form-control" name="ponumber" value="{{airinfo.ponumber}}">
+                                    </div> -->
+                                    <div class="form-group">
+                                        <label for="suppliername">Supplier Name:</label>
+                                        <input type="text" class="form-control" name="suppliername" value="{{airinfo.suppliername}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="consignee">Consignee:</label>
+                                        <input type="text" class="form-control" name="consignee" value="{{airinfo.consignee}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bookingreceiveddate">Booking Received Date:</label>
+                                        <input type="date" class="form-control" name="bookingreceiveddate" value="{{airinfo.bookingreceiveddate}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bkgdate">Bkg Date:</label>
+                                        <input type="date" class="form-control" name="bkgdate" value="{{airinfo.bkgdate}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cargoreadiness">Cargo Readiness:</label>
+                                        <input type="date" class="form-control" name="cargoreadiness" value="{{airinfo.cargoreadiness}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pickupdate">Pickup Date:</label>
+                                        <input type="date" class="form-control" name="pickupdate" value="{{airinfo.pickupdate}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="warehousercvd">Warehouse Rcvd:</label>
+                                        <input type="date" class="form-control" name="warehousercvd" value="{{airinfo.warehousercvd}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="countryoforigin">Country Of Origin:</label>
+                                        <input type="date" class="form-control" name="countryoforigin" value="{{airinfo.countryoforigin}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="terms">Terms:</label>
+                                        <input type="text" class="form-control" name="terms" value="{{airinfo.terms}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hawbno">Hawb No:</label>
+                                        <input type="text" class="form-control" name="hawbno" value="{{airinfo.hawbno}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mawb">Mawb:</label>
+                                        <input type="text" class="form-control" name="mawb" value="{{airinfo.mawb}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pkgs">Pkgs:</label>
+                                        <input type="number" class="form-control" name="pkgs" value="{{airinfo.pkgs}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="grswt">Grs WT:</label>
+                                        <input type="text" class="form-control" name="grswt" value="{{airinfo.grswt}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chgwt">Chg WT:</label>
+                                        <input type="text" class="form-control" name="chgwt" value="{{airinfo.chgwt}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fltdetails">Flt Details:</label>
+                                        <input type="text" class="form-control" name="fltdetails" value="{{airinfo.fltdetails}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="etd">Etd:</label>
+                                        <input type="text" class="form-control" name="etd" value="{{airinfo.etd}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="etd">Eta:</label>
+                                        <input type="text" class="form-control" name="eta" value="{{airinfo.eta}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="revisedetd">Revised Etd:</label>
+                                        <input type="text" class="form-control" name="revisedetd" value="{{airinfo.revisedetd}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="revisedeta">revisedeta:</label>
+                                        <input type="date" class="form-control" name="revisedeta" value="{{airinfo.revisedeta}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ata">Ata:</label>
+                                        <input type="date" class="form-control" name="ata" value="{{airinfo.ata}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="prealertdtd">Pre Alert Dtd:</label>
+                                        <input type="text" class="form-control" name="prealertdtd" value="{{airinfo.prealertdtd}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="remarks">Remarks:</label>
+                                        <input type="text" class="form-control" name="remarks" value="{{airinfo.remarks}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-info btn-lg btn-block" type="submit">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    {% endfor %}
+                </tbody>
+            </table> 
+        </div>
+
+
+        <!-- DataTables JavaScript jQuery -->
+        <!-- <script src="https://code.jquery.com/jquery-3.7.0.js"></script> -->
+
+        <!-- DataTables JavaScript -->
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                console.log("Document ready function is running.");
+                $('#example').DataTable();
+            });
+        </script>
+
+     
+</body>
+</html>

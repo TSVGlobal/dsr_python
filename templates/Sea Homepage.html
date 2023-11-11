@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static',filename='images/Favicon.png') }}" type="image/x-icon">
+    <!-- Bootstrap Design -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <!-- Bootstrap Icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Bootstrap Javascript -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+
+    <title>Sea Home Page</title>
+    <style>
+        .container-fluid{
+            margin-top: 120px;
+        }
+        .table{
+            border: 1px solid black;
+        }
+        .thead tr th{
+            padding: 10px 60px;
+            vertical-align: middle;
+            border: 1px solid black;
+            font-size: 15px;
+        }
+        .tbody tr td{
+            padding: 10px 60px;
+            vertical-align: middle; 
+            border: 1px solid black;
+            font-size: 15px;
+        }
+        .custom-form{
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+    <header class="fixed-top bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="{{url_for('static',filename='images/Logo.png')}}" width="320" height="80" alt="Company Logo">
+        </a>
+        <div class="float-right mt-3 mr-3">
+            <button class="btn btn-primary btn-lg" type="button" data-toggle="modal" data-target="#exampleModalCenter">FILTER</button>
+        </div>
+        <a href="{{ url_for('seadownload') }}" class="btn btn-success">Download</a>
+    </header>
+
+    <!-- Filter Pop Up Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Filter Table</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="searchselect">Select To Search:</label>
+                        <select class="form-control" name="search_column" id="searchselect">
+                            <option value="">--Select The Column--</option>
+                            {% for sea_column_name in sea_column_names %}
+                                <option>{{ sea_column_name }}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+                    <div class="form-group">
+                        <label for="searchtext">What Are You Searching?:</label>
+                        <input type="search" class="form-control" name="searchtext" id="searchtext">
+                    </div>
+                    <button type="submit" class="btn btn-info btn-block mt-3">Submit</button>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <div class="container-fluid">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissable" role="alert">
+                    {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <table class="table table-striped text-center" id="example">
+            <thead class="thead-dark thead">
+                <tr class="text-uppercase">
+                    <th scope="col">ID</th>
+                    <th scope="col">SHIPMENT MODE</th>
+                    <th scope="col">PONUMBER</th>
+                    <th scope="col">SUPPLIER NAME</th>
+                    <th scope="col">CONSIGNEE</th>
+                    <th scope="col">MATERIAL PICKUP DATE</th>
+                    <th scope="col">ACTUAL PICKUP DATE</th>
+                    <th scope="col">ETD ARBL</th>
+                    <th scope="col">ACTUAL ETD</th>
+                    <th scope="col">ETA ARBL</th>
+                    <th scope="col">ACTUAL ETA</th>
+                    <th scope="col">COUNTRY OF ORIGIN</th>
+                    <th scope="col">PORT OF LOADING</th>
+                    <th scope="col">CONTAINER SIZE</th>
+                    <th scope="col">NO OF CONTAINERS</th>
+                    <th scope="col">CONTAINER NUMBERS</th>
+                    <th scope="col">MBL NUMBER</th>
+                    <th scope="col">HBL NUMBER</th>
+                    <th scope="col">SHIPPING LINER</th>
+                    <th scope="col">FIRST FEEDER NAME</th>
+                    <th scope="col">FIRST FEEDER IMONO</th>
+                    <th scope="col">TRANSHIPMENT 1st ETA</th>
+                    <th scope="col">TRANSHIPMENT 1st ETD</th>
+                    <th scope="col">TRANSHIPMENT 1st PORT NAME</th>
+                    <th scope="col">MOTHER VESSEL NAME</th>
+                    <th scope="col">SECOND FEEDER NAME</th>
+                    <th scope="col">TRANSHIPMENT 2nd ETA</th>
+                    <th scope="col">TRANSHIPMENT 2nd ETD</th>
+                    <th scope="col">TRANSHIPMENT 2nd PORT NAME</th>
+                    <th scope="col">PREALERT DTD</th>
+                    <th scope="col">REMARKS</th>
+                    <th scope="col">ACTION</th> 
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                {% for seainfo in seainformation %}
+                <tr class="text-uppercase pt-1">
+                    <td>{{ seainfo.id }}</td>
+                    <td>{{ seainfo.shipmentmode }}</td>
+                    <td>{{ seainfo.ponumber }}</td>
+                    <td>{{ seainfo.suppliername }}</td>
+                    <td>{{ seainfo.consignee }}</td>
+                    <td>{{ seainfo.materialpickupdate }}</td>
+                    <td>{{ seainfo.actualpickupdate }}</td>
+                    <td>{{ seainfo.etdarbl }}</td>
+                    <td>{{ seainfo.actualetd }}</td>
+                    <td>{{ seainfo.etaarbl }}</td>
+                    <td>{{ seainfo.actualeta }}</td>
+                    <td>{{ seainfo.countryoforigin }}</td>
+                    <td>{{ seainfo.portofloading }}</td>
+                    <td>{{ seainfo.containersize }}</td>
+                    <td>{{ seainfo.noofcontainers }}</td>
+                    <td>{{ seainfo.containernumbers }}</td>
+                    <td>{{ seainfo.mblnumber }}</td>
+                    <td>{{ seainfo.hblnumber }}</td>
+                    <td>{{ seainfo.shippingliner }}</td>
+                    <td>{{ seainfo.firstfeedername }}</td>
+                    <td>{{ seainfo.firstfeederimono }}</td>
+                    <td>{{ seainfo.transhipment1steta }}</td>
+                    <td>{{ seainfo.transhipment1stetd }}</td>
+                    <td>{{ seainfo.transhipment1stportname }}</td>
+                    <td>{{ seainfo.mothervesselname }}</td>
+                    <td>{{ seainfo.secondfeedername }}</td>
+                    <td>{{ seainfo.transhipment2ndeta }}</td>
+                    <td>{{ seainfo.transhipment2ndetd }}</td>
+                    <td>{{ seainfo.transhipment2ndportname }}</td>
+                    <td>{{ seainfo.prealertdtd }}</td>
+                    <td>{{ seainfo.remarks }}</td>
+                    <td>
+                        <a href="/seaupdate/{{seainfo.id}}" class="btn btn-warning btn-xs m-2" data-toggle="modal" data-target="#modaledit{{seainfo.id}}" title="Edit"><i class="bi bi-pencil-square"></i></a>
+                        <!-- <a href="{{ url_for('seadelete', id=seainfo.id) }}" class="btn btn-danger btn-xs" data-toggle="modal" onclick="return confirm('Are You Sure To Delete?')"><i class="bi bi-trash-fill"></i></a> -->
+
+                        <form method="POST" action="{{ url_for('seadelete',id=seainfo.id) }}">
+                            <button type="submit" class="btn btn-danger btn-xs m-2" data-toggle="modal" title="Delete" onclick="return confirm('Are You Sure To Delete?')"><i class="bi bi-trash-fill"></i></button>
+                        </form>
+                    </td>  
+                </tr>
+
+                <!-- Modal Edit Employee -->
+                <div id="modaledit{{seainfo.id}}" class="modal fade" role="dialog">
+                    <div class="modal-dialog custom-form">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Update Information</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{url_for('seaupdate')}}" method="POST">
+                                    <div class="form-group">
+                                        <label for="shipmentmode">Shipment Mode:</label>
+                                        <input type="hidden" name="id" value="{{seainfo.id}}">
+                                        <input type="text" class="form-control" name="shipmentmode" value="{{seainfo.shipmentmode}}">
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <label for="id">ID:</label>
+                                        <input type="number" class="form-control" id="id" name="id" value="{{seainfo.id}}">
+                                    </div> 
+                                    <div class="form-group">
+                                        <label for="shipmentmode">Shipment Mode:</label>
+                                        <input type="text" class="form-control" name="shipmentmode" value="{{seainfo.shipmentmode}}">
+                                    </div> -->
+                                    <div class="form-group">
+                                        <label for="ponumber">Po Number:</label>
+                                        <input type="number" class="form-control" name="ponumber" value="{{seainfo.ponumber}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="suppliername">Supplier Name:</label>
+                                        <input type="text" class="form-control" name="suppliername" value="{{seainfo.suppliername}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="consignee">Consignee:</label>
+                                        <input type="text" class="form-control" name="consignee" value="{{seainfo.consignee}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="materialpickupdate">Material Pickup Date:</label>
+                                        <input type="date" class="form-control" name="materialpickupdate" value="{{seainfo.materialpickupdate}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="actualpickupdate">Actual Pickup Date:</label>
+                                        <input type="date" class="form-control" name="actualpickupdate" value="{{seainfo.actualpickupdate}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="etdarbl">ETD Arbl:</label>
+                                        <input type="date" class="form-control" name="etdarbl" value="{{seainfo.etdarbl}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="actualetd">Actual ETD:</label>
+                                        <input type="date" class="form-control" name="actualetd" value="{{seainfo.actualetd}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="etaarbl">ETA Arbl:</label>
+                                        <input type="date" class="form-control" name="etaarbl" value="{{seainfo.etaarbl}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="actualeta">Actual ETA:</label>
+                                        <input type="date" class="form-control" name="actualeta" value="{{seainfo.actualeta}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="countryoforigin">Country Of Origin:</label>
+                                        <input type="text" class="form-control" name="countryoforigin" value="{{seainfo.countryoforigin}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="portofloading">Port Of Loading:</label>
+                                        <input type="text" class="form-control" name="portofloading" value="{{seainfo.portofloading}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="containersize">Container Size:</label>
+                                        <input type="text" class="form-control" name="containersize" value="{{seainfo.containersize}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="noofcontainers">No Of Containers:</label>
+                                        <input type="number" class="form-control" name="noofcontainers" value="{{seainfo.noofcontainers}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="containernumbers">Container Numbers:</label>
+                                        <input type="text" class="form-control" name="containernumbers" value="{{seainfo.containernumbers}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mblnumber">MBL Number:</label>
+                                        <input type="text" class="form-control" name="mblnumber" value="{{seainfo.mblnumber}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hblnumber">HBL Number:</label>
+                                        <input type="text" class="form-control" name="hblnumber" value="{{seainfo.hblnumber}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="shippingliner">Shipping Liner:</label>
+                                        <input type="text" class="form-control" name="shippingliner" value="{{seainfo.shippingliner}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="firstfeedername">First Feeder Name:</label>
+                                        <input type="text" class="form-control" name="firstfeedername" value="{{seainfo.firstfeedername}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="firstfeederimono">First Feeder IMO No:</label>
+                                        <input type="text" class="form-control" name="firstfeederimono" value="{{seainfo.firstfeederimono}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="transhipment1steta">Transhipment 1st ETA:</label>
+                                        <input type="date" class="form-control" name="transhipment1steta" value="{{seainfo.transhipment1steta}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="transhipment1stetd">Transhipment 1st ETD:</label>
+                                        <input type="date" class="form-control" name="transhipment1stetd" value="{{seainfo.transhipment1stetd}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="transhipment1stportname">Transhipment 1st Port Name:</label>
+                                        <input type="text" class="form-control" name="transhipment1stportname" value="{{seainfo.transhipment1stportname}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mothervesselname">Mother Vessel Name:</label>
+                                        <input type="text" class="form-control" name="mothervesselname" value="{{seainfo.mothervesselname}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="secondfeedername">Second Feeder Name:</label>
+                                        <input type="text" class="form-control" name="secondfeedername" value="{{seainfo.secondfeedername}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="transhipment2ndeta">Transhipment 2nd ETA:</label>
+                                        <input type="date" class="form-control" name="transhipment2ndeta" value="{{seainfo.transhipment2ndeta}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="transhipment2ndetd">Transhipment 2nd ETD:</label>
+                                        <input type="date" class="form-control" name="transhipment2ndetd" value="{{seainfo.transhipment2ndetd}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="transhipment2ndportname">Transhipment 2nd Port Name:</label>
+                                        <input type="text" class="form-control" name="transhipment2ndportname" value="{{seainfo.transhipment2ndportname}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="prealertdtd">Pre alert DTD:</label>
+                                        <input type="date" class="form-control" name="prealertdtd" value="{{seainfo.prealertdtd}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="remarks">Remarks:</label>
+                                        <input type="text" class="form-control" name="remarks" value="{{seainfo.remarks}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-info" type="submit">Update</button>
+                                    </div>
+                                </form> 
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table> 
+    </div>
+    <!-- DataTables JavaScript -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // console.log("Document ready function is running.");
+            $('#example').DataTable();
+        });
+    </script>
+
+</body>
+</html>
+    

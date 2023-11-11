@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- <script src="accessControl.js"></script> -->
+    <meta charset="UTF-8">
+    <title>Air Shipment DSR Form</title>
+    <link rel="icon" href="{{ url_for('static',filename='images/Favicon.png')}}" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* Custom Styles */
+        .container {
+            margin-top: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .card-header {
+            cursor: pointer;
+        }
+        /* Highlight for "Air Shipment Form" */
+        h1 {
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            font-size: 24px;
+        }
+        /* Differentiate Section Headers */
+        .section-header {
+            background-color: #b0b7b9;
+            color:white;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 20px; /* Updated font size */
+            font-weight: bold; /* Added font-weight */
+        }
+        /* Differentiate Form Labels */
+        .form-label {
+            font-weight: bold;
+            font-size: 16px; /* Updated font size */
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="{{ url_for('static',filename='images/Logo.png')}}" alt="Company Logo" width="250">
+        <a href="{{ url_for('dsrairinfo') }}" class="btn float-right btn-success mt-3">Retrieve Air Form Data</a>
+    </header>
+    <h1>Air Shipment DSR Form</h1>
+    <main class="container">
+        <div class="progress sticky-top">
+            <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissable" role="alert">
+                    {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form id="myForm" action="{{ url_for('air') }}" method="POST">
+        <section>
+            <!-- Basic Information -->
+            <div class="card">
+                <div class="section-header" data-toggle="collapse" data-target="#basicInfo">
+                    Basic Information
+                </div>
+                <div class="card-body collapse" id="basicInfo">
+                    <!-- <div class="form-group">
+                        <label class="form-label" for="sno">Serial No</label>
+                        <input type="text" class="form-control" id="sno">
+                    </div> -->
+                    <div class="form-group">
+                        <label class="form-label" for="ponumber">PO Number</label>
+                        <input type="number" class="form-control" name="ponumber" id="ponumber" required>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <!-- Supplier and Consignee -->
+            <div class="card">
+                <div class="section-header" data-toggle="collapse" data-target="#supplierConsignee">
+                    Supplier and Consignee
+                </div>
+                <div class="card-body collapse" id="supplierConsignee">
+                    <div class="form-group">
+                        <label class="form-label" for="suppliername">Supplier Name</label>
+                        <!-- <input type="text" class="form-control" id="suppliername" > -->
+                        <select class="form-control"  name="suppliername" id="suppliername" required>
+                            <option value="">SELECT</option>
+                            <option value="7R LOGIWISE FREIGHT SOLUTIONS PRIVATE LIMITED">7R LOGIWISE FREIGHT SOLUTIONS PRIVATE LIMITED</option>
+                            <option value="ALLIED TRADE S.A.">ALLIED TRADE S.A.</option>
+                            <option value="AMARA RAJA BATTERIES LIMITED">AMARA RAJA BATTERIES LIMITED</option>
+                            <option value="AMARA RAJA ELECTRONICS LIMITED">AMARA RAJA ELECTRONICS LIMITED</option>
+                            <option value="ANGEL RESINS">ANGEL RESINS</option>
+                            <option value="AMARA RAJA ADVANCED CELL TECHNOLOGIES PRIVATE LIMITED">AMARA RAJA ADVANCED CELL TECHNOLOGIES PRIVATE LIMITED</option>
+                            <option value="BHARAT MEDICAL SYSTEMS">BHARAT MEDICAL SYSTEMS</option>
+                            <option value="BOLDROCCHI INDIA PRIVATE LIMITED">BOLDROCCHI INDIA PRIVATE LIMITED</option>
+                            <option value="CCD TECHNICAL SOLUTIONS PVT LTD">CCD TECHNICAL SOLUTIONS PVT LTD</option>
+                            <option value="DURAL TRIMS AND PROFILES PRIVATE LIMITED">DURAL TRIMS AND PROFILES PRIVATE LIMITED</option>
+                            <option value="ECOSTER RECYCLING SYSYTEM">ECOSTER RECYCLING SYSYTEM</option>
+                            <option value="EVO MARITIME SERVICES LTD">EVO MARITIME SERVICES LTD</option>
+                            <option value="EXIDE INDUSTRIES LIMITED">EXIDE INDUSTRIES LIMITED</option>
+                            <option value="FA INTERNATIONAL LOGISTICS">FA INTERNATIONAL LOGISTICS</option>
+                            <option value="FLEXIBLE STEEL LACING COMPANY PVT LTD">FLEXIBLE STEEL LACING COMPANY PVT LTD</option>
+                            <option value="FRAUSHER SENSOR TECHNOLOGY INDIA">FRAUSHER SENSOR TECHNOLOGY INDIA</option>
+                            <option value="GREENVISION TECHNOLOGIES PVT LTD">GREENVISION TECHNOLOGIES PVT LTD</option>
+                            <option value="HEURTEY PETROCHEM INDIA LTD">HEURTEY PETROCHEM INDIA LTD</option>
+                            <option value="INDUS PROTECH SOLUTIONS LIMITED">INDUS PROTECH SOLUTIONS LIMITED</option>
+                            <option value="INDUS PROTECH SOLUTIONS PVT LTD">INDUS PROTECH SOLUTIONS PVT LTD</option>
+                            <option value="INDUTCH COMPOSITES TECHNOLOGY PVT LTD">INDUTCH COMPOSITES TECHNOLOGY PVT LTD</option>
+                            <option value="ITC LIMITED - EDUCATION AND STATIONERY PRODUCTS BUSINESS">ITC LIMITED - EDUCATION AND STATIONERY PRODUCTS BUSINESS</option>
+                            <option value="JPC TRADING FZCO">JPC TRADING FZCO</option>
+                            <!-- <option value="krishna enterprises">krishna enterprises</option> -->
+                            <option value="KRISHNA ENTERPRISES.">KRISHNA ENTERPRISES</option>
+                            <option value="MANGAL INDUSTRIES LIMITED AUTO BATTERY COMPONENTS -ARGCI">MANGAL INDUSTRIES LIMITED AUTO BATTERY COMPONENTS -ARGCI</option>
+                            <option value="MANGAL INDUSTRIES LIMITED AUTO BATTERY COMPONENTS ARGCI">MANGAL INDUSTRIES LIMITED AUTO BATTERY COMPONENTS ARGCI</option>
+                            <option value="MANGAL INDUSTRIES LIMITED STORAGE SOLUTIONS">MANGAL INDUSTRIES LIMITED STORAGE SOLUTIONS</option>
+                            <option value="MANGAL INDUSTRIES LIMITED">MANGAL INDUSTRIES LIMITED</option>
+                            <option value="MANGAL INDUSTRIES LTD">MANGAL INDUSTRIES LTD</option>
+                            <option value="MEDGAS N EQUIPMENT">MEDGAS N EQUIPMENT</option>
+                            <option value="MHT FORWADING UK">MHT FORWADING UK</option>
+                            <option value="MP CONSOL INDIA PVT LTD">MP CONSOL INDIA PVT LTD</option>
+                            <option value="MSN EXPORTS">MSN EXPORTS</option>
+                            <option value="NURTURE INDIA HANDICRAFT LLP">NURTURE INDIA HANDICRAFT LLP</option>
+                            <option value="PRIME INDUSTRIES">PRIME INDUSTRIES</option>
+                            <option value="PUMPSENSE FLUID ENGINEERING PVT LTD">PUMPSENSE FLUID ENGINEERING PVT LTD</option>
+                            <option value="RAMCO INDUSTRIES (LIMITED)">RAMCO INDUSTRIES (LIMITED)</option>
+                            <option value="RAMCO INDUSTRIES LIMITED">RAMCO INDUSTRIES LIMITED</option>
+                            <option value="REVIVE UNITRADE SOLUTIONS">REVIVE UNITRADE SOLUTIONS</option>
+                            <option value="RNGALLA FAMILY PRIVATE LIMITED">RNGALLA FAMILY PRIVATE LIMITED</option>
+                            <option value="ROTAREX ENGINEERING PVT LTD">ROTAREX ENGINEERING PVT LTD</option>
+                            <option value="ROTARY MASTER MANUFACTURING PVT LTD">ROTARY MASTER MANUFACTURING PVT LTD</option>
+                            <option value="ROTE">ROTE</option>
+                            <option value="S.J.SPARE PARTS">S.J.SPARE PARTS</option>
+                            <option value="SHAYA POLYMERS PVT LTD">SHAYA POLYMERS PVT LTD</option>
+                            <option value="SHUBHA IMPEX">SHUBHA IMPEX</option>
+                            <option value="SINTECH PRECISION PRODUCTSLIMITED">SINTECH PRECISION PRODUCTSLIMITED</option>
+                            <option value="SKIPPER LIMITED">SKIPPER LIMITED</option>
+                            <option value="SPIRE TRADE & ECOMMERCE">SPIRE TRADE & ECOMMERCE</option>
+                            <option value="STENFY CHEM">STENFY CHEM</option>
+                            <option value="SVS SHIPPING SERVICES LTD">SVS SHIPPING SERVICES LTD</option>
+                            <option value="TAQA NEYVELI POWER COMPANY PVT LTD">TAQA NEYVELI POWER COMPANY PVT LTD</option>
+                            <option value="THE EIMCO KCP LTD">THE EIMCO KCP LTD</option>
+                            <option value="TI ANODE FABRICATORS PVT LTD">TI ANODE FABRICATORS PVT LTD</option>
+                            <option value="TRI STAR BUSINESS SOLUTION">TRI STAR BUSINESS SOLUTION</option>
+                            <option value="TRIDENT LIFELINE LIMITED">TRIDENT LIFELINE LIMITED</option>
+                            <option value="TSM PROJECT LOGISTICS PVT LTD">TSM PROJECT LOGISTICS PVT LTD</option>
+                            <option value="VANS CHEMISTRY PVT LTD">VANS CHEMISTRY PVT LTD</option>
+                            <option value="VC EWASTE ENG PVT LTD">VC EWASTE ENG PVT LTD</option>
+                            <option value="XXX XXX">XXX XXX</option>
+                            <option value="ZAHA GENERAL TRADING LLC">ZAHA GENERAL TRADING LLC</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="consignee">Consignee</label>
+                        <!-- <input type="text" class="form-control" id="consignee" > -->
+                        <select class="form-control" name="consignee" id="consignee" required>
+                            <option value="">SELECT</option>
+                            <option value="7R LOGIWISE FREIGHT SOLUTIONS PRIVATE LIMITED">7R LOGIWISE FREIGHT SOLUTIONS PRIVATE LIMITED</option>
+                            <option value="ALLIED TRADE S.A.">ALLIED TRADE S.A.</option>
+                            <option value="AMARA RAJA BATTERIES LIMITED">AMARA RAJA BATTERIES LIMITED</option>
+                            <option value="AMARA RAJA ELECTRONICS LIMITED">AMARA RAJA ELECTRONICS LIMITED</option>
+                            <option value="ANGEL RESINS">ANGEL RESINS</option>
+                            <option value="AMARA RAJA ADVANCED CELL TECHNOLOGIES PRIVATE LIMITED">AMARA RAJA ADVANCED CELL TECHNOLOGIES PRIVATE LIMITED</option>
+                            <option value="BHARAT MEDICAL SYSTEMS">BHARAT MEDICAL SYSTEMS</option>
+                            <option value="BOLDROCCHI INDIA PRIVATE LIMITED">BOLDROCCHI INDIA PRIVATE LIMITED</option>
+                            <option value="CCD TECHNICAL SOLUTIONS PVT LTD">CCD TECHNICAL SOLUTIONS PVT LTD</option>
+                            <option value="DURAL TRIMS AND PROFILES PRIVATE LIMITED">DURAL TRIMS AND PROFILES PRIVATE LIMITED</option>
+                            <option value="ECOSTER RECYCLING SYSYTEM">ECOSTER RECYCLING SYSYTEM</option>
+                            <option value="EVO MARITIME SERVICES LTD">EVO MARITIME SERVICES LTD</option>
+                            <option value="EXIDE INDUSTRIES LIMITED">EXIDE INDUSTRIES LIMITED</option>
+                            <option value="FA INTERNATIONAL LOGISTICS">FA INTERNATIONAL LOGISTICS</option>
+                            <option value="FLEXIBLE STEEL LACING COMPANY PVT LTD">FLEXIBLE STEEL LACING COMPANY PVT LTD</option>
+                            <option value="FRAUSHER SENSOR TECHNOLOGY INDIA">FRAUSHER SENSOR TECHNOLOGY INDIA</option>
+                            <option value="GREENVISION TECHNOLOGIES PVT LTD">GREENVISION TECHNOLOGIES PVT LTD</option>
+                            <option value="HEURTEY PETROCHEM INDIA LTD">HEURTEY PETROCHEM INDIA LTD</option>
+                            <option value="INDUS PROTECH SOLUTIONS LIMITED">INDUS PROTECH SOLUTIONS LIMITED</option>
+                            <option value="INDUS PROTECH SOLUTIONS PVT LTD">INDUS PROTECH SOLUTIONS PVT LTD</option>
+                            <option value="INDUTCH COMPOSITES TECHNOLOGY PVT LTD">INDUTCH COMPOSITES TECHNOLOGY PVT LTD</option>
+                            <option value="ITC LIMITED - EDUCATION AND STATIONERY PRODUCTS BUSINESS">ITC LIMITED - EDUCATION AND STATIONERY PRODUCTS BUSINESS</option>
+                            <option value="JPC TRADING FZCO">JPC TRADING FZCO</option>
+                            <!-- <option value="krishna enterprises">krishna enterprises</option> -->
+                            <option value="KRISHNA ENTERPRISES">KRISHNA ENTERPRISES.</option>
+                            <option value="MANGAL INDUSTRIES LIMITED AUTO BATTERY COMPONENTS -ARGCI">MANGAL INDUSTRIES LIMITED AUTO BATTERY COMPONENTS -ARGCI</option>
+                            <option value="MANGAL INDUSTRIES LIMITED AUTO BATTERY COMPONENTS ARGCI">MANGAL INDUSTRIES LIMITED AUTO BATTERY COMPONENTS ARGCI</option>
+                            <option value="MANGAL INDUSTRIES LIMITED STORAGE SOLUTIONS">MANGAL INDUSTRIES LIMITED STORAGE SOLUTIONS</option>
+                            <option value="MANGAL INDUSTRIES LIMITED">MANGAL INDUSTRIES LIMITED</option>
+                            <option value="MANGAL INDUSTRIES LTD">MANGAL INDUSTRIES LTD</option>
+                            <option value="MEDGAS N EQUIPMENT">MEDGAS N EQUIPMENT</option>
+                            <option value="MHT FORWADING UK">MHT FORWADING UK</option>
+                            <option value="MP CONSOL INDIA PVT LTD">MP CONSOL INDIA PVT LTD</option>
+                            <option value="MSN EXPORTS">MSN EXPORTS</option>
+                            <option value="NURTURE INDIA HANDICRAFT LLP">NURTURE INDIA HANDICRAFT LLP</option>
+                            <option value="PRIME INDUSTRIES">PRIME INDUSTRIES</option>
+                            <option value="PUMPSENSE FLUID ENGINEERING PVT LTD">PUMPSENSE FLUID ENGINEERING PVT LTD</option>
+                            <option value="RAMCO INDUSTRIES (LIMITED)">RAMCO INDUSTRIES (LIMITED)</option>
+                            <option value="RAMCO INDUSTRIES LIMITED">RAMCO INDUSTRIES LIMITED</option>
+                            <option value="REVIVE UNITRADE SOLUTIONS">REVIVE UNITRADE SOLUTIONS</option>
+                            <option value="RNGALLA FAMILY PRIVATE LIMITED">RNGALLA FAMILY PRIVATE LIMITED</option>
+                            <option value="ROTAREX ENGINEERING PVT LTD">ROTAREX ENGINEERING PVT LTD</option>
+                            <option value="ROTARY MASTER MANUFACTURING PVT LTD">ROTARY MASTER MANUFACTURING PVT LTD</option>
+                            <option value="ROTE">ROTE</option>
+                            <option value="S.J.SPARE PARTS">S.J.SPARE PARTS</option>
+                            <option value="SHAYA POLYMERS PVT LTD">SHAYA POLYMERS PVT LTD</option>
+                            <option value="SHUBHA IMPEX">SHUBHA IMPEX</option>
+                            <option value="SINTECH PRECISION PRODUCTSLIMITED">SINTECH PRECISION PRODUCTSLIMITED</option>
+                            <option value="SKIPPER LIMITED">SKIPPER LIMITED</option>
+                            <option value="SPIRE TRADE & ECOMMERCE">SPIRE TRADE & ECOMMERCE</option>
+                            <option value="STENFY CHEM">STENFY CHEM</option>
+                            <option value="SVS SHIPPING SERVICES LTD">SVS SHIPPING SERVICES LTD</option>
+                            <option value="TAQA NEYVELI POWER COMPANY PVT LTD">TAQA NEYVELI POWER COMPANY PVT LTD</option>
+                            <option value="THE EIMCO KCP LTD">THE EIMCO KCP LTD</option>
+                            <option value="TI ANODE FABRICATORS PVT LTD">TI ANODE FABRICATORS PVT LTD</option>
+                            <option value="TRI STAR BUSINESS SOLUTION">TRI STAR BUSINESS SOLUTION</option>
+                            <option value="TRIDENT LIFELINE LIMITED">TRIDENT LIFELINE LIMITED</option>
+                            <option value="TSM PROJECT LOGISTICS PVT LTD">TSM PROJECT LOGISTICS PVT LTD</option>
+                            <option value="VANS CHEMISTRY PVT LTD">VANS CHEMISTRY PVT LTD</option>
+                            <option value="VC EWASTE ENG PVT LTD">VC EWASTE ENG PVT LTD</option>
+                            <option value="XXX XXX">XXX XXX</option>
+                            <option value="ZAHA GENERAL TRADING LLC">ZAHA GENERAL TRADING LLC</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <!-- Dates -->
+            <div class="card">
+                <div class="section-header" data-toggle="collapse" data-target="#dates">
+                    Dates
+                </div>
+                <div class="card-body collapse" id="dates">
+                    <!-- Add more date fields here -->
+                    <div class="form-group">
+                        <label class="form-label" for="bookingreceiveddate">Booking Received Date</label>
+                        <input type="date" class="form-control" name="bookingreceiveddate" id="bookingreceiveddate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bkgdate">BKG Date</label>
+                        <input type="date" class="form-control" name="bkgdate" id="bkgdate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cargoreadiness">Cargo Readiness</label>
+                        <input type="date" class="form-control" name="cargoreadiness" id="cargoreadiness" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="pickupdate">PickUp Date</label>
+                        <input type="date" class="form-control" name="pickupdate" id="pickupdate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="warehousercvd">Warehouse RCVD</label>
+                        <input type="date" class="form-control" name="warehousercvd" id="warehousercvd" required>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <!-- Origin and Loading -->
+            <div class="card">
+                <div class="section-header" data-toggle="collapse" data-target="#originTerms">
+                    Origin and Terms
+                </div>
+                <div class="card-body collapse" id="originTerms">
+                    <div class="form-group">
+                        <label class="form-label" for="countryoforigin">Country of Origin</label><br>
+                        <!-- <input type="text" class="form-control" id="countryoforigin"> -->
+                        <select class="form-control" title="country" name="countryoforigin" id="countryoforigin" required>
+                            <option value="">SELECT</option>
+                            <option value="AFGHANISTAN">AFGHANISTAN</option>
+                            <option value="ALBANIA">ALBANIA</option>
+                            <option value="ALGERIA">ALGERIA</option>
+                            <option value="AMERICAN SAMOA">AMERICAN SAMOA</option>
+                            <option value="ANDORRA">ANDORRA</option>
+                            <option value="ANGOLA">ANGOLA</option>
+                            <option value="ANGUILLA">ANGUILLA</option>
+                            <option value="ANTIGUA & BARBUDA">ANTIGUA & BARBUDA</option>
+                            <option value="ARGENTINA">ARGENTINA</option>
+                            <option value="ARMENIA">ARMENIA</option>
+                            <option value="ARUBA">ARUBA</option>
+                            <option value="AUSTRALIA">AUSTRALIA</option>
+                            <option value="AUSTRIA">AUSTRIA</option>
+                            <option value="AZERBAIJAN">AZERBAIJAN</option>
+                            <option value="BAHAMAS">BAHAMAS</option>
+                            <option value="BAHRAIN">BAHRAIN</option>
+                            <option value="BANGLADESH">BANGLADESH</option>
+                            <option value="BARBADOS">BARBADOS</option>
+                            <option value="BELARUS">BELARUS</option>
+                            <option value="BELGIUM">BELGIUM</option>
+                            <option value="BELIZE">BELIZE</option>
+                            <option value="BENIN">BENIN</option>
+                            <option value="BERMUDA">BERMUDA</option>
+                            <option value="BHUTAN">BHUTAN</option>
+                            <option value="BOLIVIA">BOLIVIA</option>
+                            <option value="BONAIRE">BONAIRE</option>
+                            <option value="BOSNIA & HERZEGOVINA">BOSNIA & HERZEGOVINA</option>
+                            <option value="BOTSWANA">BOTSWANA</option>
+                            <option value="BRAZIL">BRAZIL</option>
+                            <option value="BRITISH INDIAN OCEAN TER">BRITISH INDIAN OCEAN TER</option>
+                            <option value="BRUNEI">BRUNEI</option>
+                            <option value="BULGARIA">BULGARIA</option>
+                            <option value="BURKINA FASO">BURKINA FASO</option>
+                            <option value="BURUNDI">BURUNDI</option>
+                            <option value="CAMBODIA">CAMBODIA</option>
+                            <option value="CAMEROON">CAMEROON</option>
+                            <option value="CANADA">CANADA</option>
+                            <option value="CANARY ISLANDS">CANARY ISLANDS</option>
+                            <option value="CAPE VERDE">CAPE VERDE</option>
+                            <option value="CAYMAN ISLANDS">CAYMAN ISLANDS</option>
+                            <option value="CENTRAL AFRICAN REPUBLIC">CENTRAL AFRICAN REPUBLIC</option>
+                            <option value="CHAD">CHAD</option>
+                            <option value="CHANNEL ISLANDS">CHANNEL ISLANDS</option>
+                            <option value="CHILE">CHILE</option>
+                            <option value="CHINA">CHINA</option>
+                            <option value="CHRISTMAS ISLAND">CHRISTMAS ISLAND</option>
+                            <option value="COCOS ISLAND">COCOS ISLAND</option>
+                            <option value="COLOMBIA">COLOMBIA</option>
+                            <option value="COMOROS">COMOROS</option>
+                            <option value="CONGO">CONGO</option>
+                            <option value="COOK ISLANDS">COOK ISLANDS</option>
+                            <option value="COSTA RICA">COSTA RICA</option>
+                            <option value="COTE D'IVOIRE">COTE D'IVOIRE</option>
+                            <option value="CROATIA">CROATIA</option>
+                            <option value="CUBA">CUBA</option>
+                            <option value="CURACAO">CURACAO</option>
+                            <option value="CYPRUS">CYPRUS</option>
+                            <option value="CZECH REPUBLIC">CZECH REPUBLIC</option>
+                            <option value="DENMARK">DENMARK</option>
+                            <option value="DJIBOUTI">DJIBOUTI</option>
+                            <option value="DOMINICA">DOMINICA</option>
+                            <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
+                            <option value="EAST TIMOR">EAST TIMOR</option>
+                            <option value="ECUADOR">ECUADOR</option>
+                            <option value="EGYPT">EGYPT</option>
+                            <option value="EL SALVADOR">EL SALVADOR</option>
+                            <option value="EQUATORIAL GUINEA">EQUATORIAL GUINEA</option>
+                            <option value="ERITREA">ERITREA</option>
+                            <option value="ESTONIA">ESTONIA</option>
+                            <option value="ETHIOPIA">ETHIOPIA</option>
+                            <option value="FALKLAND ISLANDS">FALKLAND ISLANDS</option>
+                            <option value="FAROE ISLANDS">FAROE ISLANDS</option>
+                            <option value="FIJI">FIJI</option>
+                            <option value="FINLAND">FINLAND</option>
+                            <option value="FRANCE">FRANCE</option>
+                            <option value="FRENCH GUIANA">FRENCH GUIANA</option>
+                            <option value="FRENCH POLYNESIA">FRENCH POLYNESIA</option>
+                            <option value="FRENCH SOUTHERN TER">FRENCH SOUTHERN TER</option>
+                            <option value="GABON">GABON</option>
+                            <option value="GAMBIA">GAMBIA</option>
+                            <option value="GEORGIA">GEORGIA</option>
+                            <option value="GERMANY">GERMANY</option>
+                            <option value="GHANA">GHANA</option>
+                            <option value="GIBRALTAR">GIBRALTAR</option>
+                            <option value="GREAT BRITAIN">GREAT BRITAIN</option>
+                            <option value="GREECE">GREECE</option>
+                            <option value="GREENLAND">GREENLAND</option>
+                            <option value="GRENADA">GRENADA</option>
+                            <option value="GUADELOUPE">GUADELOUPE</option>
+                            <option value="GUAM">GUAM</option>
+                            <option value="GUATEMALA">GUATEMALA</option>
+                            <option value="GUINEA">GUINEA</option>
+                            <option value="GUYANA">GUYANA</option>
+                            <option value="HAITI">HAITI</option>
+                            <option value="HAWAII">HAWAII</option>
+                            <option value="HONDURAS">HONDURAS</option>
+                            <option value="HONG KONG">HONG KONG</option>
+                            <option value="HUNGARY">HUNGARY</option>
+                            <option value="ICELAND">ICELAND</option>
+                            <option value="INDIA">INDIA</option>
+                            <option value="INDONESIA">INDONESIA</option>
+                            <option value="IRAN">IRAN</option>
+                            <option value="IRAQ">IRAQ</option>
+                            <option value="IRELAND">IRELAND</option>
+                            <option value="ISLE OF MAN">ISLE OF MAN</option>
+                            <option value="ISRAEL">ISRAEL</option>
+                            <option value="ITALY">ITALY</option>
+                            <option value="JAMAICA">JAMAICA</option>
+                            <option value="JAPAN">JAPAN</option>
+                            <option value="JORDAN">JORDAN</option>
+                            <option value="KAZAKHSTAN">KAZAKHSTAN</option>
+                            <option value="KENYA">KENYA</option>
+                            <option value="KIRIBATI">KIRIBATI</option>
+                            <option value="KOREA NORTH">KOREA NORTH</option>
+                            <option value="KOREA SOUTH">KOREA SOUTH</option>
+                            <option value="KUWAIT">KUWAIT</option>
+                            <option value="KYRGYZSTAN">KYRGYZSTAN</option>
+                            <option value="LAOS">LAOS</option>
+                            <option value="LATVIA">LATVIA</option>
+                            <option value="LEBANON">LEBANON</option>
+                            <option value="LESOTHO">LESOTHO</option>
+                            <option value="LIBERIA">LIBERIA</option>
+                            <option value="LIBYA">LIBYA</option>
+                            <option value="LIECHTENSTEIN">LIECHTENSTEIN</option>
+                            <option value="LITHUANIA">LITHUANIA</option>
+                            <option value="LUXEMBOURG">LUXEMBOURG</option>
+                            <option value="MACAU">MACAU</option>
+                            <option value="MACEDONIA">MACEDONIA</option>
+                            <option value="MADAGASCAR">MADAGASCAR</option>
+                            <option value="MALAYSIA">MALAYSIA</option>
+                            <option value="MALAWI">MALAWI</option>
+                            <option value="MALDIVES">MALDIVES</option>
+                            <option value="MALI">MALI</option>
+                            <option value="MALTA">MALTA</option>
+                            <option value="MARSHALL ISLANDS">MARSHALL ISLANDS</option>
+                            <option value="MARTINIQUE">MARTINIQUE</option>
+                            <option value="MAURITANIA">MAURITANIA</option>
+                            <option value="MAURITIUS">MAURITIUS</option>
+                            <option value="MAYOTTE">MAYOTTE</option>
+                            <option value="MEXICO">MEXICO</option>
+                            <option value="MIDWAY ISLANDS">MIDWAY ISLANDS</option>
+                            <option value="MOLDOVA">MOLDOVA</option>
+                            <option value="MONACO">MONACO</option>
+                            <option value="MONGOLIA">MONGOLIA</option>
+                            <option value="MONTSERRAT">MONTSERRAT</option>
+                            <option value="MOROCCO">MOROCCO</option>
+                            <option value="MOZAMBIQUE">MOZAMBIQUE</option>
+                            <option value="MYANMAR">MYANMAR</option>
+                            <option value="NAMBIA">NAMBIA</option>
+                            <option value="NAURU">NAURU</option>
+                            <option value="NEPAL">NEPAL</option>
+                            <option value="NETHERLAND ANTILLES">NETHERLAND ANTILLES</option>
+                            <option value="NETHERLANDS (HOLLAND, EUROPE)">NETHERLANDS (HOLLAND, EUROPE)</option>
+                            <option value="NEVIS">NEVIS</option>
+                            <option value="NEW CALEDONIA">NEW CALEDONIA</option>
+                            <option value="NEW ZEALAND">NEW ZEALAND</option>
+                            <option value="NICARAGUA">NICARAGUA</option>
+                            <option value="NIGER">NIGER</option>
+                            <option value="NIGERIA">NIGERIA</option>
+                            <option value="NIUE">NIUE</option>
+                            <option value="NORFOLK ISLAND">NORFOLK ISLAND</option>
+                            <option value="NORWAY">NORWAY</option>
+                            <option value="OMAN">OMAN</option>
+                            <option value="PAKISTAN">PAKISTAN</option>
+                            <option value="PALAU ISLAND">PALAU ISLAND</option>
+                            <option value="PALESTINE">PALESTINE</option>
+                            <option value="PANAMA">PANAMA</option>
+                            <option value="PAPUA NEW GUINEA">PAPUA NEW GUINEA</option>
+                            <option value="PARAGUAY">PARAGUAY</option>
+                            <option value="PERU">PERU</option>
+                            <option value="PHILIPPINES">PHILIPPINES</option>
+                            <option value="PITCAIRN ISLAND">PITCAIRN ISLAND</option>
+                            <option value="POLAND">POLAND</option>
+                            <option value="PORTUGAL">PORTUGAL</option>
+                            <option value="PUERTO RICO">PUERTO RICO</option>
+                            <option value="QATAR">QATAR</option>
+                            <option value="REPUBLIC OF MONTENEGRO">REPUBLIC OF MONTENEGRO</option>
+                            <option value="REPUBLIC OF SERBIA">REPUBLIC OF SERBIA</option>
+                            <option value="REUNION">REUNION</option>
+                            <option value="ROMANIA">ROMANIA</option>
+                            <option value="RUSSIA">RUSSIA</option>
+                            <option value="RWANDA">RWANDA</option>
+                            <option value="ST BARTHELEMY">ST BARTHELEMY</option>
+                            <option value="ST EUSTATIUS">ST EUSTATIUS</option>
+                            <option value="ST HELENA">ST HELENA</option>
+                            <option value="ST KITTS-NEVIS">ST KITTS-NEVIS</option>
+                            <option value="ST LUCIA">ST LUCIA</option>
+                            <option value="ST MAARTEN">ST MAARTEN</option>
+                            <option value="ST PIERRE & MIQUELON">ST PIERRE & MIQUELON</option>
+                            <option value="ST VINCENT & GRENADINES">ST VINCENT & GRENADINES</option>
+                            <option value="SAIPAN">SAIPAN</option>
+                            <option value="SAMOA">SAMOA</option>
+                            <option value="SAMOA AMERICAN">SAMOA AMERICAN</option>
+                            <option value="SAN MARINO">SAN MARINO</option>
+                            <option value="SAO TOME & PRINCIPE">SAO TOME & PRINCIPE</option>
+                            <option value="SAUDI ARABIA">SAUDI ARABIA</option>
+                            <option value="SENEGAL">SENEGAL</option>
+                            <option value="SERBIA">SERBIA</option>
+                            <option value="SEYCHELLES">SEYCHELLES</option>
+                            <option value="SIERRA LEONE">SIERRA LEONE</option>
+                            <option value="SINGAPORE">SINGAPORE</option>
+                            <option value="SLOVAKIA">SLOVAKIA</option>
+                            <option value="SLOVENIA">SLOVENIA</option>
+                            <option value="SOLOMON ISLANDS">SOLOMON ISLANDS</option>
+                            <option value="SOMALIA">SOMALIA</option>
+                            <option value="SOUTH AFRICA">SOUTH AFRICA</option>
+                            <option value="SPAIN">SPAIN</option>
+                            <option value="SRI LANKA">SRI LANKA</option>
+                            <option value="SUDAN">SUDAN</option>
+                            <option value="SURINAME">SURINAME</option>
+                            <option value="SWAZILAND">SWAZILAND</option>
+                            <option value="SWEDEN">SWEDEN</option>
+                            <option value="SWITZERLAND">SWITZERLAND</option>
+                            <option value="SYRIA">SYRIA</option>
+                            <option value="TAHITI">TAHITI</option>
+                            <option value="TAIWAN">TAIWAN</option>
+                            <option value="TAJIKISTAN">TAJIKISTAN</option>
+                            <option value="TANZANIA">TANZANIA</option>
+                            <option value="THAILAND">THAILAND</option>
+                            <option value="TOGO">TOGO</option>
+                            <option value="TOKELAU">TOKELAU</option>
+                            <option value="TONGA">TONGA</option>
+                            <option value="TRINIDAD & TOBAGO">TRINIDAD & TOBAGO</option>
+                            <option value="TUNISIA">TUNISIA</option>
+                            <option value="TURKEY">TURKEY</option>
+                            <option value="TURKMENISTAN">TURKMENISTAN</option>
+                            <option value="TURKS & CAICOS IS">TURKS & CAICOS IS</option>
+                            <option value="TUVALU">TUVALU</option>
+                            <option value="UGANDA">UGANDA</option>
+                            <option value="UKRAINE">UKRAINE</option>
+                            <option value="UNITED ARAB EMIRATES">UNITED ARAB EMIRATES</option>
+                            <option value="UNITED KINGDOM">UNITED KINGDOM</option>
+                            <option value="UNITED STATES OF AMERICA">UNITED STATES OF AMERICA</option>
+                            <option value="URUGUAY">URUGUAY</option>
+                            <option value="UZBEKISTAN">UZBEKISTAN</option>
+                            <option value="VANUATU">VANUATU</option>
+                            <option value="VATICAN CITY STATE">VATICAN CITY STATE</option>
+                            <option value="VENEZUELA">VENEZUELA</option>
+                            <option value="VIETNAM">VIETNAM</option>
+                            <option value="VIRGIN ISLANDS (BRIT)">VIRGIN ISLANDS (BRIT)</option>
+                            <option value="VIRGIN ISLANDS (USA)">VIRGIN ISLANDS (USA)</option>
+                            <option value="WAKE ISLAND">WAKE ISLAND</option>
+                            <option value="WALLIS & FUTANA IS">WALLIS & FUTANA IS</option>
+                            <option value="YEMEN">YEMEN</option>
+                            <option value="ZAIRE">ZAIRE</option>
+                            <option value="ZAMBIA">ZAMBIA</option>    
+                            <option value="ZIMBABWE">ZIMBABWE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="terms">Terms</label>
+                        <!-- <input type="text" class="form-control" id="terms"> -->
+                        <select class="form-control" name="terms" id="terms" required>
+                            <option value="">SELECT</option>
+                            <option value="EXW">EXW</option>
+                            <option value="FCA">FCA</option>
+                            <option value="CPT">CPT</option>
+                            <option value="CIP">CIP</option>
+                            <option value="DAP">DAP</option>
+                            <option value="DPU">DPU</option>
+                            <option value="DDP">DDP</option>
+                            <option value="FAS">FAS</option>
+                            <option value="FOB">FOB</option>
+                            <option value="CFR">CFR</option>
+                            <option value="CIF">CIF</option>
+                        </select>
+                    </div>
+                    <!-- Add more fields here -->
+                </div>
+            </div>
+        </section>
+        <section>
+            <!-- HAWB NO, MAWB, PKGS -->
+            <div class="card">
+                <div class="section-header" data-toggle="collapse" data-target="#hawbmawbpkgs">
+                    HAWB NO,MAWB & PKGS
+                </div>
+                <div class="card-body collapse" id="hawbmawbpkgs">
+                    <div class="form-group">
+                        <label class="form-label" for="hawbno">HAWB NO</label>
+                        <input type="text" class="form-control" name="hawbno" id="hawbno" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="mawb">MAWB</label>
+                        <input type="text" class="form-control" name="mawb" id="mawb" equired>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="pkgs">PKGS</label>
+                        <input type="number" class="form-control" name="pkgs" id="pkgs" required>
+                    </div>
+                    <!-- Add more fields here -->
+                </div>
+            </div>
+        </section>
+        <section>
+            <!-- GRS WT, CHG WT -->
+            <div class="card">
+                <div class="section-header" data-toggle="collapse" data-target="#grschg">
+                    GRS WT & CHG WT
+                </div>
+                <div class="card-body collapse" id="grschg">
+                    <div class="form-group">
+                        <label class="form-label" for="grswt">GRS WT</label>
+                        <input type="text" class="form-control" name="grswt" id="grswt" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="chgwt">CHG WT</label>
+                        <input type="text" class="form-control" name="chgwt" id="chgwt" required>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <!-- FLT Details -->
+            <div class="card">
+                <div class="section-header" data-toggle="collapse" data-target="#fltDetails">
+                    FLT Details
+                </div>
+                <div class="card-body collapse" id="fltDetails">
+                    <div class="form-group">
+                        <label class="form-label" for="fltdetails">FLT Details</label>
+                        <input type="text" class="form-control" name="fltdetails" id="fltdetails" required>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <!-- ETD, ETA, Revised ETD, Revised ETA, ATA -->
+            <div class="card">
+                <div class="section-header" data-toggle="collapse" data-target="#etdetaata">
+                    ETA,ETD & ATA
+                </div>
+                <div class="card-body collapse" id="etdetaata">
+                    <div class="form-group">
+                        <label class="form-label" for="etd">ETD</label>
+                        <input type="date" class="form-control" name="etd" id="etd" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="eta">ETA</label>
+                        <input type="date" class="form-control" name="eta" id="eta" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="revisedetd">Revised ETD</label>
+                        <input type="date" class="form-control" name="revisedetd" id="revisedetd" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="revisedeta">Revised ETA</label>
+                        <input type="date" class="form-control" name="revisedeta" id="revisedeta" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="ata">ATA</label>
+                        <input type="text" class="form-control" name="ata" id="ata" required>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="card">
+                <div class="section-header" data-toggle="collapse" data-target="#remarkstab">
+                    Prealert DTD & Remarks
+                </div>
+                <div class="card-body collapse" id="remarkstab">
+                    <div class="form-group">
+                        <label class="form-label" for="prealertdtd">Prealert DTD</label>
+                        <input type="date" class="form-control" name="prealertdtd" id="prealertdtd" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="remarks">Remarks</label>
+                        <input type="text" class="form-control" name="remarks" id="remarks" required>
+                    </div>
+                </div>
+            </div>
+        </section>
+               <!-- Submit Button -->
+            <button type="submit" name="submit" id="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+            
+        </form>
+        <footer class="footer">
+            <p>All Rights Reserved &copy; 2023</p>
+          </footer>
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <!-- <script type="text/javascript" src="{{ url_for('static',filename='js/airscripts.js')}}"></script> -->
+
+
+</body>
+</html>
+

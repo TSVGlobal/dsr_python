@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choosing Shipment Type</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static',filename='images/Favicon.png') }}" type="image/x-icon">
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <header class="d-flex justify-content-between align-items-center p-3">
+            <img src="{{ url_for('static',filename='images/Logo.png') }}" alt="Company Logo" class="img-fluid" style="width:280px;">
+        </header>
+        <main class="d-flex flex-column align-items-center justify-content-center h-100">
+            <h1 class="mb-5">TYPES OF SHIPMENT</h1>
+            <div class="btn-group-vertical">
+                <a href="{{ url_for('air') }}" class="btn btn-primary mb-3 btn-lg" role="button">Air Transport</a>
+                <a href="{{ url_for('sea') }}" class="btn btn-primary btn-lg" role="button">Sea Transport</a>
+                <!-- <a href="#" class="btn btn-danger btn-lg mt-3" role="button">Info</a> -->
+            </div>
+        </main>
+    </div>
+</body>
+</html>
